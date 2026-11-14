@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SS7 Attack • Wifite • BurpSuite • NASA</title>
+<style>
+  :root{
+    --bg:#05080d;
+    --panel:#0b1220;
+    --green:#00ff9c;
+    --cyan:#00e5ff;
+    --red:#ff3860;
+    --text:#c8d6e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:radial-gradient(circle at 50% 0%, #0a1a2f 0%, var(--bg) 60%);
+    color:var(--text);
+    font-family:"Courier New",monospace;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  /* Matrix rain canvas */
+  canvas#matrix{position:fixed;top:0;left:0;z-index:0;opacity:.25}
+  .wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:30px 20px}
+  header{
+    text-align:center;
+    border:1px solid var(--green);
+    padding:25px;
+    border-radius:12px;
+    background:rgba(11,18,32,.85);
+    box-shadow:0 0 25px rgba(0,255,156,.25);
+  }
+  h1{
+    font-size:clamp(1.2rem,4vw,2.4rem);
+    color:var(--green);
+    text-shadow:0 0 10px var(--green);
+    letter-spacing:2px;
+  }
+  h1 span{color:var(--cyan);text-shadow:0 0 10px var(--cyan)}
+  .sub{margin-top:10px;color:#7d8fa3;font-size:.9rem}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+    margin-top:25px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid #1c2a40;
+    border-radius:12px;
+    padding:18px;
+    transition:.3s;
+  }
+  .card:hover{
+    border-color:var(--cyan);
+    transform:translateY(-4px);
+    box-shadow:0 0 20px rgba(0,229,255,.35);
+  }
+  .card h2{
+    font-size:1rem;
+    color:var(--cyan);
+    margin-bottom:12px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 1s infinite}
+  @keyframes blink{50%{opacity:.2}}
+  .term{
+    background:#000;
+    border:1px solid #1c2a40;
+    border-radius:8px;
+    padding:12px;
+    font-size:.8rem;
+    color:var(--green);
+    height:150px;
+    overflow:hidden;
+    line-height:1.6;
+  }
+  .term .red{color:var(--red)}
+  .term .cyan{color:var(--cyan)}
+  .badge{
+    display:inline-block;
+    font-size:.7rem;
+    padding:3px 8px;
+    border-radius:20px;
+    margin:2px 4px 2px 0;
+    border:1px solid var(--cyan);
+    color:var(--cyan);
+  }
+  footer{
+    text-align:center;margin-top:30px;font-size:.75rem;color:#4a5a6e;
+  }
+  .bar{
+    height:6px;background:#0e1726;border-radius:4px;overflow:hidden;margin-top:10px;
+  }
+  .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--cyan));animation:load 3s infinite}
+  @keyframes load{0%{width:0}70%{width:90%}100%{width:100%}}
+</style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+
+<div class="wrap">
+  <header>
+    <h1>⚡ SS7 ATTACK • <span>WIFITE</span> • BURPSUITE • <span>NASA</span></h1>
+    <p class="sub">// cyber operations dashboard — live telemetry simulated //</p>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h2><span class="dot"></span>SS7 SIGNALING</h2>
+      <div class="term" id="ss7">
+        <div>[+] MAP: SendRoutingInfo → OK</div>
+        <div>[+] SRI-SM flooding...</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot cyan"></span>WIFITE SCAN</h2>
+      <div class="term" id="wifi">
+        <div>[+] wlan0 monitor mode...</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></span>BURPSUITE PROXY</h2>
+      <div class="term" id="burp">
+        <div>[^] Intercept ON :8080</div>
+        <div>GET /api/nasa HTTP/1.1</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot cyan"></span>NASA TELEMETRY</h2>
+      <div class="term" id="nasa">
+        <div>[+] ISS orbit: 408 km</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h2>🌐 NETWORK STATUS</h2>
+    <span class="badge">SS7 LEAK</span>
+    <span class="badge">WPA2 CAPTURED</span>
+    <span class="badge">HTTP/2 ACTIVE</span>
+    <span class="badge">TELEMETRY SYNC</span>
+    <div class="bar"><i></i></div>
+  </div>
+
+  <footer>© 2025 CYBER-COM CONSOLE • edukasi jaringan & keamanan</footer>
+</div>
+
+<script>
+/* ===== Matrix rain ===== */
+const cvs=document.getElementById('matrix'),ctx=cvs.getContext('2d');
+function resize(){cvs.width=innerWidth;cvs.height=innerHeight;}
+resize();addEventListener('resize',resize);
+const chars="01SS7WIFITEBURPNASA<>/\\{}[]$#@";
+const cols=()=>Math.floor(cvs.width/14);
+let drops=[];
+function initDrops(){drops=Array(cols()).fill(0).map(()=>Math.random()*cvs.height);}
+initDrops();
+function rain(){
+  ctx.fillStyle="rgba(5,8,13,0.08)";ctx.fillRect(0,0,cvs.width,cvs.height);
+  ctx.fillStyle="#00ff9c";ctx.font="14px monospace";
+  drops.forEach((y,i)=>{
+    ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*14,y);
+    drops[i]=y>cvs.height&&Math.random()>.975?0:y+14;
+  });
+}
+setInterval(rain,50);
+
+/* ===== Terminal feeds ===== */
+const feeds={
+  ss7:[
+    "[+] MAP: SendRoutingInfo → OK",
+    "[!] SRI-SM flooding target...",
+    "[+] UpdateLocation intercepted",
+    "[!] IMSI catcher simulation",
+    "[+] SMSC routing leak detected",
+    "[!] TMSI mismatch — alert",
+    "[+] SS7 firewall bypass (lab)",
+  ],
+  wifi:[
+    "[+] wlan0 → monitor mode",
+    "[+] Handshake captured (WPA2)",
+    "[!] PMKID grab attempt...",
+    "[+] Deauth sent to AP:xx:xx",
+    "[+] ESSID: NASA-ISS-RELAY",
+    "[!] WPS pin brute (lab)",
+    "[+] Saved cap to handshake.cap",
+  ],
+  burp:[
+    "[^] Intercept ON :8080",
+    "GET /api/nasa/telemetry HTTP/1.1",
+    "[+] Proxy listener active",
+    "[!] Cookie session token found",
+    "[^] Repeater: 200 OK",
+    "[+] Payload injected (test)",
+    "[^] Scan: 4 issues · Medium",
+  ],
+  nasa:[
+    "[+] ISS orbit altitude: 408 km",
+    "[+] Live feed: SAT-1 synced",
+    "[+] Data packet: apod.json valid",
+    "[!] Solar flare monitor: mild",
+    "[+] Ground station: HOUSTON",
+    "[+] Telemetry latency: 42 ms",
+    "[+] Mission clock synchronized",
+  ]
+};
+function tick(id,arr){
+  const box=document.getElementById(id);
+  let i=Math.floor(Math.random()*arr.length);
+  const line=document.createElement('div');
+  line.textContent=arr[i];
+  if(arr[i].includes('!'))line.className='red';
+  if(arr[i].includes('^'))line.className='cyan';
+  box.appendChild(line);
+  if(box.childElementCount>8)box.removeChild(box.firstChild);
+}
+setInterval(()=>tick('ss7',feeds.ss7),900);
+setInterval(()=>tick('wifi',feeds.wifi),1200);
+setInterval(()=>tick('burp',feeds.burp),1000);
+setInterval(()=>tick('nasa',feeds.nasa),1400);
+</script>
+</body>
+</html>
